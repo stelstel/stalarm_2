@@ -4,6 +4,7 @@ import json
 import stalarm
 
 app = Flask(__name__)
+app.config["DEBUG"] = True  # Enable debug mode
 
 @app.route('/')
 @app.route('/index')
