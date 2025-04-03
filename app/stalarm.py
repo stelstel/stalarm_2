@@ -41,6 +41,10 @@ for symbol in symbols:
 
         company_name = stock_data_dict.get("longName", "N/A")
 
+        # Construct the URL to the stock's Yahoo Finance page
+        stock_url = f"https://finance.yahoo.com/quote/{symbol}"
+        print(f"URL to {company_name} ({symbol}) stock: {stock_url}") # //////////////////////////////////////////////////////////
+
         # Get historical data since start date
         historical_data = stock_info.history(start=start_date)
 
