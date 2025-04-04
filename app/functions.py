@@ -1,7 +1,9 @@
 # functions.py
 # Author: Stefan Elmgren
-# Date: 2025-03-21 - 2025-03-25
+# Date: 2025-03-21 - 2025-04-04
 
+import sys
+import os
 import configparser
 from datetime import datetime
 import pytz
@@ -20,13 +22,29 @@ def read_config_ini():
             - start_date (datetime): The start date for monitoring stock data.
     """
 
+    # Define the path to the config file
+    if getattr(sys, 'frozen', False):  # Check if running as a compiled executable
+        # If running as .exe, the config is in the _MEIPASS folder
+        config_file_path = os.path.join(sys._MEIPASS, 'app')
+    else:
+        # If running as a script, it's in the app folder relative to the script
+        # config_file_path = os.path.join(os.path.dirname(__file__), 'app')
+        config_file_path = os.path.dirname(__file__)
+
+    config_file = "config.ini"
+
+    print(f"Loading config from: {config_file_path}\{config_file}") # /////////////////////////////////
+
+
     # Load the config file
     config = configparser.ConfigParser()
-    config_file_path = "app"
-    config_file = "config.ini"
-    config.read(f"{config_file_path}/{config_file}")
 
-    # Read stock symbols
+    full_path = os.path.join(config_file_path, config_file) # ////////////////////////////////
+    print("FULL CONFIG PATH:", full_path) # ////////////////////////////////
+    print("EXISTS?", os.path.exists(full_path)) # ////////////////////////////////
+
+
+    config.read(os.path.join(config_file_path, config_file))
     stock_symbols = config["stocks"]["symbols"].replace(" ", "")  # Removes spaces
     symbols = stock_symbols.split(",")  # Converts to a list
 
@@ -59,7 +77,6 @@ def convert_to_swedish_timezone(timestamp):
 
     # Return the formatted date and time as 'YY-MM-DD, HH:MM' (without seconds)
     return time_swedish.strftime("%y-%m-%d, %H:%M")
-
 
 
 def custom_sort(df):
